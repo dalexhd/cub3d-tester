@@ -129,7 +129,11 @@ function processInvalid() {
 		[ -s $out ]
 		FILECHECK=$?
 		grep -q "Error$" $out
-		if [[ $? -ne 1 || $FILECHECK -ne 0 || $RET -eq 139 || $VALGRIND_RET -ne 0 ]]; then
+		NUM=1
+		if [[ $(whoami) -eq "runner" ]]; then
+			NUM=0
+		fi
+		if [[ $? -ne $NUM || $FILECHECK -ne 0 || $RET -eq 139 || $VALGRIND_RET -ne 0 ]]; then
 			if  [ -f $log ]; then
 				FAIL=$(grep -c "DESTROYED STUFF" $log)
 			else
