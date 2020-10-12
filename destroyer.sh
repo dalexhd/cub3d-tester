@@ -240,7 +240,7 @@ printf "${BRED}DESTROYED:\t%d \t\n" $FAIL
 printf "${BBLU}TIME ELAPSED:\t%dms \t\n\n" $tt
 printf "${BBLU}================== ${BWHT} REPORT.LOG CREATED ${BBLU} ===================${RESET}\n\n"
 
-if [[ $SHOW_OUTPUT ]]; then
+if [[ $SHOW_OUTPUT -eq 1 ]]; then
 	cat $log
 fi
 
