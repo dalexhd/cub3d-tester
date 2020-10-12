@@ -123,7 +123,7 @@ function processInvalid() {
 		fi
 		../cub3D $file &>$out &
 		while [ ! -f $out ]; do sleep 0.001; done
-		kill $! &>/dev/null
+		# kill $! &>/dev/null
 		wait $! 2>/dev/null
 		RET=$?
 		[ -s $out ]
@@ -175,6 +175,7 @@ function processValid() {
 		log=report.log
 		out=tmp/tmp-$1.txt
 		file="valid_maps/$1"
+		VALGRIND_RET=0
 		if [[ $2 -eq 0 ]]; then
 			valgrind_out=tmp/valgrind_tmp-$1.txt
 			valgrind --tool=memcheck --leak-check=full --leak-resolution=high --show-leak-kinds=all --track-origins=yes --verbose ../cub3D $file &>$valgrind_out &
@@ -183,13 +184,14 @@ function processValid() {
 		fi
 		../cub3D $file &>$out &
 		while [ ! -f $out ]; do sleep 0.001; done
-		kill $! &>/dev/null
+		# kill $! &>/dev/null
 		wait $! 2>/dev/null
 		RET=$?
 		[ -s $out ]
 		FILECHECK=$?
 		grep -q "Error$" $out
 		if [[ $RET -ne 0 || $VALGRIND_RET -ne 0 ]]; then
+		# echo $VALGRIND_RET;
 			if  [ -f $log ]; then
 				FAIL=$(grep -c "DESTROYED STUFF" $log)
 			else
@@ -239,9 +241,9 @@ printf "${BGRN}BULLETPROOF:\t%d\t\n" $OK
 printf "${BRED}DESTROYED:\t%d \t\n" $FAIL
 printf "${BBLU}TIME ELAPSED:\t%dms \t\n\n" $tt
 printf "${BBLU}================== ${BWHT} REPORT.LOG CREATED ${BBLU} ===================${RESET}\n\n"
-
 if [[ $SHOW_OUTPUT -eq 1 ]]; then
 	cat $log
 fi
-
-exit 0
+if [[ $FAIL -gt 0]]
+	exit 1
+fi
