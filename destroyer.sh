@@ -214,6 +214,8 @@ function processValid() {
 				display_leftandright "${RESET}" "" "${BRED}" "MAP: $file" "[EMPTY]"
 				echo "[EMPTY]" >> $log
 			fi
+			display_leftandright "${RESET}" "" "${BRED}" "MAP: $file" "[FO]"
+
 			cat $out
 			rm -f $out
 			rm -f $valgrind_out
@@ -230,9 +232,9 @@ export -f processInvalid
 find ./invalid_maps/*.cub -type f -printf "%f\n" | xargs -n 1 -P $PROCESS -I {} bash -c 'processInvalid "$@" '$NO_LEAKS _ {}
 
 # ITERATE THROUGH VALID MAPS
-export -f processValid
-find ./valid_maps/*.cub -type f -printf "%f\n" | xargs -n 1 -P $PROCESS -I {} bash -c 'processValid "$@" '$NO_LEAKS _ {}
-rm -f $out
+# export -f processValid
+# find ./valid_maps/*.cub -type f -printf "%f\n" | xargs -n 1 -P $PROCESS -I {} bash -c 'processValid "$@" '$NO_LEAKS _ {}
+# rm -f $out
 
 #OUTPUT FINAL RESULT
 FAIL=$(grep -c "DESTROYED STUFF" $log)
@@ -248,6 +250,6 @@ printf "${BBLU}================== ${BWHT} REPORT.LOG CREATED ${BBLU} ===========
 if [[ $SHOW_OUTPUT -eq 1 ]]; then
 	cat $log
 fi
-if [[ $FAIL -gt 0]]
+if [[ $FAIL -gt 0 ]]; then
 	exit 1
 fi
