@@ -229,7 +229,7 @@ function processValid() {
 
 export -f processInvalid
 # ITERATE THROUGH INVALID MAPS
-find ./invalid_maps/*.cub -type f -printf "%f\n" | xargs -n 1 -P $PROCESS -I {} bash -c 'processInvalid "$@" '$NO_LEAKS _ {}
+gfind ./invalid_maps/*.cub -type f -printf "%f\n" | xargs -n 1 -P $PROCESS -I {} bash -c 'processInvalid "$@" '$NO_LEAKS _ {}
 
 # ITERATE THROUGH VALID MAPS
 # export -f processValid
